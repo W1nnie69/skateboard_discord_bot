@@ -18,8 +18,14 @@ driver.get(url)
 
 # time.sleep(1000)
 
-driver.find_element(By.CLASS_NAME, "D_mP.D_bkw").click()
+driver.find_element(By.CSS_SELECTOR, "button.D_oX.D_biI").click()
 
-# ligma = driver.find_element(By.XPATH, '//div[@id="D_ue D_oA"]')
-# print(ligma)
+# time.sleep(100)
+ligma = driver.find_elements(By.CSS_SELECTOR, "div.D_tN.D_nO")
+ 
+with open("test.txt", "a"):
+    for index, div in enumerate(ligma):
+        content = div.text
+
+
 
