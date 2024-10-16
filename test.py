@@ -1,5 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+import time
 
 chrome_options = Options()
 chrome_options.add_argument("--disable-extensions")
@@ -14,5 +16,10 @@ url = "https://www.carousell.sg/search/skateboard?addRecent=true&canChangeKeywor
 
 driver.get(url)
 
-print(driver.page_source.encode("utf-8"))
+# time.sleep(1000)
+
+driver.find_element(By.CLASS_NAME, "D_mP.D_bkw").click()
+
+# ligma = driver.find_element(By.XPATH, '//div[@id="D_ue D_oA"]')
+# print(ligma)
 
