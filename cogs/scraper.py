@@ -4,8 +4,12 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from discord.ext import commands
+from discord import Color
 import time
 import asyncio
+from icecream import ic
+import dcids
+
 
 class Scraper(commands.Cog):
     def __init__(self, bot: commands.Bot):
@@ -21,7 +25,7 @@ class Scraper(commands.Cog):
     gay = False
 
 
-    async def scrap(self):
+    async def scrape(self):
         chrome_options = Options()
         chrome_options.add_argument("--disable-extensions")
         chrome_options.add_argument("--disable-gpu")
@@ -66,39 +70,139 @@ class Scraper(commands.Cog):
             # Append the div content (with links) to the list
             div_content_list.append(div_content)
 
+        with open("testing.json", "r", encoding="utf-8") as f:
+            temp_old_data = json.load(f)
 
-        with open("testing.json", "w", encoding="utf-8") as json_file:
-            json.dump(div_content_list, json_file, ensure_ascii=False, indent=4)
+
+            
+
+        
+        with open("div_content_list.json", "w", encoding="utf-8") as file:
+            json.dump(div_content_list, file, ensure_ascii=False, indent=4)
+
+        with open("temp_old_data.json", "w", encoding="utf-8") as file:
+            json.dump(temp_old_data, file, ensure_ascii=False, indent=4)
+
+
+
+        diff = []
+
+        old_contents = {item['content'] for item in temp_old_data}
+
+        for new_item in div_content_list:
+            if "days" in new_item['content']:
+                continue # Skip this item if it contains "days"
+
+            if "day" in new_item['content']:
+                continue # Skip this item if it contains "days"
+
+            if new_item['content'] not in old_contents:
+                diff.append(new_item)
+
+                
+    
+
+        with open("diff.json", "w", encoding="utf-8") as file:
+            json.dump(diff, file, ensure_ascii=False, indent=4)
+
+        return diff
+
+
+        # with open("testing.json", "w", encoding="utf-8") as json_file:
+        #     json.dump(div_content_list, json_file, ensure_ascii=False, indent=4)
         
 
 
 
 
-    @commands.command()
-    async def toggle_ws(self, ctx):
-        if self.gay == False:
-            await ctx.send("Web Scraping Enabled!")
+    async def send_alert(self, ctx, htmldata):
+        red = Color.red()
+
+        embed_alert = discord.Embed(
+            title=':rotating_light::rotating_light:__**ALERT! New Listing Detected**__:rotating_light::rotating_light:',
+            colour=red
+        )
+
+        content_list = []
+        link_list = []
+        selected_content = []
+        selected_items = []
+
+        data = htmldata
+            
+        for div in data:
+            links = div.get('links', [])
+            content = div.get('content', [])
+
+            if len(links) >= 2:
+                link_list.append(links[1])
+
+            if content:
+                content_list.append(content)
+                
+            else:
+                pass
+
+        # for i in range(1, 2):
+        #     if i < len(link_list):
+        #         selected_items.append(link_list[i])
+        #         selected_content.append(content_list[i])
+        
+
+        # dick = dict(zip(content_list, link_list))
+
+        
+        for x, y in zip(content_list, link_list):
+            embed_alert.add_field(name='', value=f"{x}", inline=False)
+            embed_alert.add_field(name='', value=f"[LINK HERE]({y})", inline=False)
+            embed_alert.add_field(name='', value=f"<@{dcids.marcusid}><@{dcids.ryzzid}><@{dcids.danishid}>", inline=False)
+            await ctx.send(embed=embed_alert)  
+            embed_alert.clear_fields()
             await asyncio.sleep(1)
 
-        self.gay = not self.gay
-
-        while self.gay == True:
-            await ctx.send("I love Marcus")
-            await asyncio.sleep(3)
 
 
-            if self.gay == False:
-                await ctx.send("Web Scraping Disabled!")
-                break
+
+
+
+
+    # @commands.command()
+    # async def toggle_ws(self, ctx):
+    #     if self.gay == False:
+    #         await ctx.send("Web Scraping Enabled!")
+    #         await asyncio.sleep(1)
+
+    #     self.gay = not self.gay
+
+    #     while self.gay == True:
+    #         data = await self.scrape()
+    #         await self.send_alert(data)
             
-    
+    #         await asyncio.sleep(3)
+
+
+    #         if self.gay == False:
+    #             await ctx.send("Web Scraping Disabled!")
+    #             break
+            
+
+
+
+
+    @commands.command()
+    async def test_ws(self, ctx):
+        htmldata = await self.scrape()
+        # await self.send_alert(ctx, htmldata)
         
     
 
     @commands.command()
-    async def test_alert(self, ctx):
+    async def test_alert(self, ctx, data):
+        red = Color.red()
+
         embed_alert = discord.Embed(
-            title='ALERT',
+            title=':rotating_light::rotating_light:__**ALERT! New Listing Detected**__:rotating_light::rotating_light:',
+            colour=red
         )
 
         content_list = []
@@ -123,7 +227,7 @@ class Scraper(commands.Cog):
             else:
                 pass
 
-        for i in range(1, 10):
+        for i in range(1, 2):
             if i < len(link_list):
                 selected_items.append(link_list[i])
                 selected_content.append(content_list[i])
@@ -133,10 +237,14 @@ class Scraper(commands.Cog):
 
         
         for x, y in zip(selected_content, selected_items):
-            embed_alert.add_field(name=x, value=f"[Link]({y})", inline=False)
-                
+            embed_alert.add_field(name='', value=f"{x}", inline=False)
+            embed_alert.add_field(name='', value=f"[LINK HERE]({y})", inline=False)
+            embed_alert.add_field(name='', value=f"<@{dids.marcusid}><@{dids.ryzzid}><@{dids.danishid}>", inline=False)
+            await ctx.send(embed=embed_alert)  
+            embed_alert.clear_fields()
+            await asyncio.sleep(1)
 
-        await ctx.send(embed=embed_alert)
+        # await ctx.send(embed=embed_alert)
 
 
 
