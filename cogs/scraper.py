@@ -41,14 +41,14 @@ class Scraper(commands.Cog):
 
         # time.sleep(1000)
 
-        driver.find_element(By.CSS_SELECTOR, "button.D_oX.D_biI").click()
+        driver.find_element(By.XPATH, '//button[@aria-label="Close"]').click()
 
         # time.sleep(100)
-        ligma = driver.find_elements(By.CSS_SELECTOR, "div.D_tN.D_nO")
+        testid_divs = driver.find_elements(By.XPATH, '//div[contains(@data-testid, "listing-card-")]')
 
         div_content_list = []
 
-        for index, div in enumerate(ligma):
+        for index, div in enumerate(testid_divs):
             # Extract the div content
             div_content = {
                 "div_number": index + 1,
@@ -71,9 +71,11 @@ class Scraper(commands.Cog):
             div_content_list.append(div_content)
 
 
+        driver.quit()
 
-        with open("temp_old_data.json", "r", encoding="utf-8") as f:
-            temp_old_data = json.load(f)
+
+        with open("old_data.json", "r", encoding="utf-8") as f:
+            old_data = json.load(f)
 
 
         
@@ -83,53 +85,69 @@ class Scraper(commands.Cog):
         # with open("temp_old_data.json", "w", encoding="utf-8") as file:
         #     json.dump(temp_old_data, file, ensure_ascii=False, indent=4)
 
-        time_list = ["23 hours ago", "22 hours ago", "21 hours ago", 
-                     "20 hours ago", "19 hours ago", "18 hours ago", 
-                     "17 hours ago", "16 hours ago", "15 hours ago",
-                     "14 hours ago", "13 hours ago", "12 hours ago",
-                     "11 hours ago", "10 hours ago", "9 hours ago",
-                     "8 hours ago", "7 hours ago", "6 hours ago",
-                     "5 hours ago", "4 hours ago", "3 hours ago",
-                     "2 hours ago"]
+        
+        time_list_new = ['1 hour ago', '2 hours ago', '3 hours ago',
+                         '4 hours ago', '5 hours ago', '6 hours ago', 
+                         '7 hours ago', '8 hours ago', '9 hours ago', 
+                         '10 hours ago', '11 hours ago', '12 hours ago', 
+                         '13 hours ago', '14 hours ago', '15 hours ago', 
+                         '16 hours ago', '17 hours ago', '18 hours ago', 
+                         '19 hours ago', '20 hours ago', '21 hours ago', 
+                         '22 hours ago', '23 hours ago', '6 minutes ago', 
+                         '7 minutes ago', '8 minutes ago', '9 minutes ago', 
+                         '10 minutes ago', '11 minutes ago', '12 minutes ago', 
+                         '13 minutes ago', '14 minutes ago', '15 minutes ago', 
+                         '16 minutes ago', '17 minutes ago', '18 minutes ago', 
+                         '19 minutes ago', '20 minutes ago', '21 minutes ago', 
+                         '22 minutes ago', '23 minutes ago', '24 minutes ago', 
+                         '25 minutes ago', '26 minutes ago', '27 minutes ago', 
+                         '28 minutes ago', '29 minutes ago', '30 minutes ago', 
+                         '31 minutes ago', '32 minutes ago', '33 minutes ago', 
+                         '34 minutes ago', '35 minutes ago', '36 minutes ago', 
+                         '37 minutes ago', '38 minutes ago', '39 minutes ago', 
+                         '40 minutes ago', '41 minutes ago', '42 minutes ago', 
+                         '43 minutes ago', '44 minutes ago', '45 minutes ago', 
+                         '46 minutes ago', '47 minutes ago', '48 minutes ago', 
+                         '49 minutes ago', '50 minutes ago', '51 minutes ago', 
+                         '52 minutes ago', '53 minutes ago', '54 minutes ago', 
+                         '55 minutes ago', '56 minutes ago', '57 minutes ago', 
+                         '58 minutes ago', '59 minutes ago']
 
         diff = []
 
-        old_contents = {item['content'] for item in temp_old_data}
+        old_contents = {item['content'] for item in old_data}
 
         for new_item in div_content_list:
-            if "days" in new_item['content']:
-                continue # Skip this item if it contains "days"
+            if "day" in new_item['content'] or "days" in new_item['content']:
+                continue # Skip this item if it contains "days or day"
 
-            if "day" in new_item['content']:
-                continue # Skip this item if it contains "day"
-
-            for time in time_list:
-                if time in new_item['content']:
-                    continue # Skip this item if it contains hours in the time_list
+            if any(time in new_item['content'] for time in time_list_new):
+                continue # Skip this item if it contains any time from the time_list
 
             if new_item['content'] not in old_contents:
                 diff.append(new_item)
 
-                
-    
+        ic(diff)
 
-        with open("diff.json", "w", encoding="utf-8") as file:
-            json.dump(diff, file, ensure_ascii=False, indent=4)
+        if diff:
+            with open("diff.json", "w", encoding="utf-8") as file:
+                json.dump(diff, file, ensure_ascii=False, indent=4)
 
+            with open("old_data.json", "w", encoding="utf-8") as json_file:
+                        json.dump(div_content_list, json_file, ensure_ascii=False, indent=4)
 
-        with open("temp_old_data.json", "w", encoding="utf-8") as json_file:
-            json.dump(div_content_list, json_file, ensure_ascii=False, indent=4)
+            return diff
+            
+        else:
+            print("IF YOU SEE THIS THAT MEANS 'DIFF' IS EMPTY")
+            with open("old_data.json", "w", encoding="utf-8") as json_file:
+                        json.dump(div_content_list, json_file, ensure_ascii=False, indent=4)
 
-
-        return diff
+            print("IF YOU SEE THIS THAT MEANS IT WORKS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+       
 
 
         
-        
-
-
-
-
     async def send_alert(self, ctx, htmldata):
         red = Color.red()
 
@@ -178,37 +196,53 @@ class Scraper(commands.Cog):
 
 
 
+    async def toggle_logic(self, ctx):
+         while self.gay == True:
+            htmldata = await self.scrape()
 
-
-    # @commands.command()
-    # async def toggle_ws(self, ctx):
-    #     if self.gay == False:
-    #         await ctx.send("Web Scraping Enabled!")
-    #         await asyncio.sleep(1)
-
-    #     self.gay = not self.gay
-
-    #     while self.gay == True:
-    #         data = await self.scrape()
-    #         await self.send_alert(data)
+            if htmldata:
+                await self.send_alert(ctx, htmldata)
+        
+            else:
+                pass
             
-    #         await asyncio.sleep(3)
+
+            await asyncio.sleep(10)
 
 
-    #         if self.gay == False:
-    #             await ctx.send("Web Scraping Disabled!")
-    #             break
-            
+            if self.gay == False:
+                break
 
 
 
 
     @commands.command()
+    async def toggle_ws(self, ctx):
+        if self.gay == False:
+            await ctx.send("Web Scraping Enabled!")
+            await asyncio.sleep(1)
+
+        self.gay = not self.gay
+
+        if self.gay == True:
+            await self.toggle_logic(ctx)
+
+        else:
+            await ctx.send("Web Scraping Disabled!")
+            
+        
+        
+
+
+    @commands.command()
     async def test_ws(self, ctx):
         htmldata = await self.scrape()
-        await self.send_alert(ctx, htmldata)
+
+        if htmldata:
+            await self.send_alert(ctx, htmldata)
         
-    
+        else:
+            pass
 
     @commands.command()
     async def test_alert(self, ctx):
