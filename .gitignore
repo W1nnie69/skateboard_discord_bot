@@ -161,3 +161,4 @@ cython_debug/
 config.py
 discordids.py
 dcids.py
+list.py
