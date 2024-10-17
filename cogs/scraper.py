@@ -88,14 +88,7 @@ class Scraper(commands.Cog):
         #     json.dump(temp_old_data, file, ensure_ascii=False, indent=4)
 
         
-        time_list_new = ['1 hour ago', '2 hours ago', '3 hours ago',
-                         '4 hours ago', '5 hours ago', '6 hours ago', 
-                         '7 hours ago', '8 hours ago', '9 hours ago', 
-                         '10 hours ago', '11 hours ago', '12 hours ago', 
-                         '13 hours ago', '14 hours ago', '15 hours ago', 
-                         '16 hours ago', '17 hours ago', '18 hours ago', 
-                         '19 hours ago', '20 hours ago', '21 hours ago', 
-                         '22 hours ago', '23 hours ago', '6 minutes ago', 
+        time_list_new = ['4 minutes ago', '5 minutes ago', '6 minutes ago', 
                          '7 minutes ago', '8 minutes ago', '9 minutes ago', 
                          '10 minutes ago', '11 minutes ago', '12 minutes ago', 
                          '13 minutes ago', '14 minutes ago', '15 minutes ago', 
@@ -113,7 +106,15 @@ class Scraper(commands.Cog):
                          '49 minutes ago', '50 minutes ago', '51 minutes ago', 
                          '52 minutes ago', '53 minutes ago', '54 minutes ago', 
                          '55 minutes ago', '56 minutes ago', '57 minutes ago', 
-                         '58 minutes ago', '59 minutes ago']
+                         '58 minutes ago', '59 minutes ago', '60 minutes ago', 
+                         '1 hour ago', '2 hours ago', '3 hours ago', 
+                         '4 hours ago', '5 hours ago', '6 hours ago', 
+                         '7 hours ago', '8 hours ago', '9 hours ago', 
+                         '10 hours ago', '11 hours ago', '12 hours ago', 
+                         '13 hours ago', '14 hours ago', '15 hours ago', 
+                         '16 hours ago', '17 hours ago', '18 hours ago', 
+                         '19 hours ago', '20 hours ago', '21 hours ago', 
+                         '22 hours ago', '23 hours ago', '24 hours ago']
 
         diff = []
 
@@ -209,7 +210,7 @@ class Scraper(commands.Cog):
                 pass
             
 
-            await asyncio.sleep(300)
+            await asyncio.sleep(180)
 
 
             if self.gay == False:
