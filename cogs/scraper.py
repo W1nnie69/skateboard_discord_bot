@@ -70,20 +70,27 @@ class Scraper(commands.Cog):
             # Append the div content (with links) to the list
             div_content_list.append(div_content)
 
-        with open("testing.json", "r", encoding="utf-8") as f:
+
+
+        with open("temp_old_data.json", "r", encoding="utf-8") as f:
             temp_old_data = json.load(f)
 
 
-            
-
         
-        with open("div_content_list.json", "w", encoding="utf-8") as file:
-            json.dump(div_content_list, file, ensure_ascii=False, indent=4)
+        # with open("div_content_list.json", "w", encoding="utf-8") as file:
+        #     json.dump(div_content_list, file, ensure_ascii=False, indent=4)
 
-        with open("temp_old_data.json", "w", encoding="utf-8") as file:
-            json.dump(temp_old_data, file, ensure_ascii=False, indent=4)
+        # with open("temp_old_data.json", "w", encoding="utf-8") as file:
+        #     json.dump(temp_old_data, file, ensure_ascii=False, indent=4)
 
-
+        time_list = ["23 hours ago", "22 hours ago", "21 hours ago", 
+                     "20 hours ago", "19 hours ago", "18 hours ago", 
+                     "17 hours ago", "16 hours ago", "15 hours ago",
+                     "14 hours ago", "13 hours ago", "12 hours ago",
+                     "11 hours ago", "10 hours ago", "9 hours ago",
+                     "8 hours ago", "7 hours ago", "6 hours ago",
+                     "5 hours ago", "4 hours ago", "3 hours ago",
+                     "2 hours ago"]
 
         diff = []
 
@@ -94,7 +101,11 @@ class Scraper(commands.Cog):
                 continue # Skip this item if it contains "days"
 
             if "day" in new_item['content']:
-                continue # Skip this item if it contains "days"
+                continue # Skip this item if it contains "day"
+
+            for time in time_list:
+                if time in new_item['content']:
+                    continue # Skip this item if it contains hours in the time_list
 
             if new_item['content'] not in old_contents:
                 diff.append(new_item)
@@ -105,11 +116,15 @@ class Scraper(commands.Cog):
         with open("diff.json", "w", encoding="utf-8") as file:
             json.dump(diff, file, ensure_ascii=False, indent=4)
 
+
+        with open("temp_old_data.json", "w", encoding="utf-8") as json_file:
+            json.dump(div_content_list, json_file, ensure_ascii=False, indent=4)
+
+
         return diff
 
 
-        # with open("testing.json", "w", encoding="utf-8") as json_file:
-        #     json.dump(div_content_list, json_file, ensure_ascii=False, indent=4)
+        
         
 
 
@@ -128,9 +143,8 @@ class Scraper(commands.Cog):
         selected_content = []
         selected_items = []
 
-        data = htmldata
             
-        for div in data:
+        for div in htmldata:
             links = div.get('links', [])
             content = div.get('content', [])
 
@@ -192,12 +206,12 @@ class Scraper(commands.Cog):
     @commands.command()
     async def test_ws(self, ctx):
         htmldata = await self.scrape()
-        # await self.send_alert(ctx, htmldata)
+        await self.send_alert(ctx, htmldata)
         
     
 
     @commands.command()
-    async def test_alert(self, ctx, data):
+    async def test_alert(self, ctx):
         red = Color.red()
 
         embed_alert = discord.Embed(
@@ -239,7 +253,7 @@ class Scraper(commands.Cog):
         for x, y in zip(selected_content, selected_items):
             embed_alert.add_field(name='', value=f"{x}", inline=False)
             embed_alert.add_field(name='', value=f"[LINK HERE]({y})", inline=False)
-            embed_alert.add_field(name='', value=f"<@{dids.marcusid}><@{dids.ryzzid}><@{dids.danishid}>", inline=False)
+            embed_alert.add_field(name='', value=f"<@{dcids.marcusid}><@{dcids.ryzzid}><@{dcids.danishid}>", inline=False)
             await ctx.send(embed=embed_alert)  
             embed_alert.clear_fields()
             await asyncio.sleep(1)
