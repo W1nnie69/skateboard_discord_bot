@@ -2,7 +2,9 @@ import discord
 import json
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.service import Service
 from selenium.webdriver.common.by import By
+from webdriver_manager.chrome import ChromeDriverManager
 from discord.ext import commands
 from discord import Color
 import time
@@ -29,11 +31,11 @@ class Scraper(commands.Cog):
         chrome_options = Options()
         chrome_options.add_argument("--disable-extensions")
         chrome_options.add_argument("--disable-gpu")
-        # chrome_options.add_argument("--no-sandbox") # linux only
+        chrome_options.add_argument("--no-sandbox") # linux only
         # chrome_options.add_argument("--headless=new") # for Chrome >= 109
         # chrome_options.add_argument("--headless")
         # chrome_options.headless = True # also works
-        driver = webdriver.Chrome(options=chrome_options)
+        driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
 
         url = "https://www.carousell.sg/search/skateboard?addRecent=true&canChangeKeyword=true&includeSuggestions=true&price_start=1&searchId=t1nH5D&sort_by=3&t-search_query_source=direct_search"
 
@@ -207,7 +209,7 @@ class Scraper(commands.Cog):
                 pass
             
 
-            await asyncio.sleep(60)
+            await asyncio.sleep(300)
 
 
             if self.gay == False:
