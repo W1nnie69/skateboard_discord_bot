@@ -207,7 +207,7 @@ class Scraper(commands.Cog):
                 pass
             
 
-            await asyncio.sleep(10)
+            await asyncio.sleep(60)
 
 
             if self.gay == False:
