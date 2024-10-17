@@ -185,7 +185,7 @@ class Scraper(commands.Cog):
         
 
         # dick = dict(zip(content_list, link_list))
-
+        # user = self.client.get_user(dcids.marcusid)
         
         for x, y in zip(content_list, link_list):
             embed_alert.add_field(name='', value=f"{x}", inline=False)
@@ -237,15 +237,15 @@ class Scraper(commands.Cog):
         
 
 
-    @commands.command()
-    async def test_ws(self, ctx):
-        htmldata = await self.scrape()
+    # @commands.command()
+    # async def test_ws(self, ctx):
+    #     htmldata = await self.scrape()
 
-        if htmldata:
-            await self.send_alert(ctx, htmldata)
+    #     if htmldata:
+    #         await self.send_alert(ctx, htmldata)
         
-        else:
-            pass
+    #     else:
+    #         pass
 
     @commands.command()
     async def test_alert(self, ctx):
@@ -262,7 +262,7 @@ class Scraper(commands.Cog):
         selected_items = []
 
 
-        with open('testing.json', 'r', encoding='utf-8') as jf:
+        with open('old_data.json', 'r', encoding='utf-8') as jf:
             data = json.load(jf)
             
         for div in data:
@@ -285,17 +285,16 @@ class Scraper(commands.Cog):
         
 
         # dick = dict(zip(content_list, link_list))
-
+        user = self.client.get_user(dcids.myid)
         
         for x, y in zip(selected_content, selected_items):
             embed_alert.add_field(name='', value=f"{x}", inline=False)
             embed_alert.add_field(name='', value=f"[LINK HERE]({y})", inline=False)
             embed_alert.add_field(name='', value=f"<@{dcids.marcusid}><@{dcids.ryzzid}><@{dcids.danishid}>", inline=False)
-            await ctx.send(embed=embed_alert)  
+            await user.send(embed=embed_alert)  
             embed_alert.clear_fields()
             await asyncio.sleep(1)
 
-        # await ctx.send(embed=embed_alert)
 
 
 
