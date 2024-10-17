@@ -185,13 +185,13 @@ class Scraper(commands.Cog):
         
 
         # dick = dict(zip(content_list, link_list))
-        # user = self.client.get_user(dcids.marcusid)
+        user = self.bot.get_user(dcids.marcusid)
         
         for x, y in zip(content_list, link_list):
             embed_alert.add_field(name='', value=f"{x}", inline=False)
             embed_alert.add_field(name='', value=f"[LINK HERE]({y})", inline=False)
             embed_alert.add_field(name='', value=f"<@{dcids.marcusid}><@{dcids.ryzzid}><@{dcids.danishid}>", inline=False)
-            await ctx.send(embed=embed_alert)  
+            await user.send(embed=embed_alert)  
             embed_alert.clear_fields()
             await asyncio.sleep(1)
 
@@ -247,53 +247,55 @@ class Scraper(commands.Cog):
     #     else:
     #         pass
 
-    @commands.command()
-    async def test_alert(self, ctx):
-        red = Color.red()
-
-        embed_alert = discord.Embed(
-            title=':rotating_light::rotating_light:__**ALERT! New Listing Detected**__:rotating_light::rotating_light:',
-            colour=red
-        )
-
-        content_list = []
-        link_list = []
-        selected_content = []
-        selected_items = []
 
 
-        with open('old_data.json', 'r', encoding='utf-8') as jf:
-            data = json.load(jf)
+    # @commands.command()
+    # async def test_alert(self, ctx):
+    #     red = Color.red()
+
+    #     embed_alert = discord.Embed(
+    #         title=':rotating_light::rotating_light:__**ALERT! New Listing Detected**__:rotating_light::rotating_light:',
+    #         colour=red
+    #     )
+
+    #     content_list = []
+    #     link_list = []
+    #     selected_content = []
+    #     selected_items = []
+
+
+    #     with open('old_data.json', 'r', encoding='utf-8') as jf:
+    #         data = json.load(jf)
             
-        for div in data:
-            links = div.get('links', [])
-            content = div.get('content', [])
+    #     for div in data:
+    #         links = div.get('links', [])
+    #         content = div.get('content', [])
 
-            if len(links) >= 2:
-                link_list.append(links[1])
+    #         if len(links) >= 2:
+    #             link_list.append(links[1])
 
-            if content:
-                content_list.append(content)
+    #         if content:
+    #             content_list.append(content)
                 
-            else:
-                pass
+    #         else:
+    #             pass
 
-        for i in range(1, 2):
-            if i < len(link_list):
-                selected_items.append(link_list[i])
-                selected_content.append(content_list[i])
+    #     for i in range(1, 2):
+    #         if i < len(link_list):
+    #             selected_items.append(link_list[i])
+    #             selected_content.append(content_list[i])
         
 
-        # dick = dict(zip(content_list, link_list))
-        user = self.client.get_user(dcids.myid)
+    #     # dick = dict(zip(content_list, link_list))
+    #     user = self.bot.get_user(dcids.marcusid)
         
-        for x, y in zip(selected_content, selected_items):
-            embed_alert.add_field(name='', value=f"{x}", inline=False)
-            embed_alert.add_field(name='', value=f"[LINK HERE]({y})", inline=False)
-            embed_alert.add_field(name='', value=f"<@{dcids.marcusid}><@{dcids.ryzzid}><@{dcids.danishid}>", inline=False)
-            await user.send(embed=embed_alert)  
-            embed_alert.clear_fields()
-            await asyncio.sleep(1)
+    #     for x, y in zip(selected_content, selected_items):
+    #         embed_alert.add_field(name='', value=f"{x}", inline=False)
+    #         embed_alert.add_field(name='', value=f"[LINK HERE]({y})", inline=False)
+    #         embed_alert.add_field(name='', value=f"<@{dcids.marcusid}><@{dcids.ryzzid}><@{dcids.danishid}>", inline=False)
+    #         await user.send(embed=embed_alert)  
+    #         embed_alert.clear_fields()
+    #         await asyncio.sleep(1)
 
 
 
