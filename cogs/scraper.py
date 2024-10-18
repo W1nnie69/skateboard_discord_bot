@@ -4,6 +4,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
+from selenium.common.exceptions import TimeoutException
 from webdriver_manager.chrome import ChromeDriverManager
 from discord.ext import commands
 from discord import Color
@@ -39,7 +40,19 @@ class Scraper(commands.Cog):
 
         url = "https://www.carousell.sg/search/skateboard?addRecent=true&canChangeKeyword=true&includeSuggestions=true&price_start=1&searchId=t1nH5D&sort_by=3&t-search_query_source=direct_search"
 
-        driver.get(url)
+        driver.set_page_load_timeout(15)
+
+        try:
+            driver.get(url)
+
+        except TimeoutException:
+            print("Page took too long to load...")
+
+        except Exception as e:
+            # Handle any other exceptions that may occur
+            print(f"An error occurred: {e}")
+
+
 
         # time.sleep(1000)
 
