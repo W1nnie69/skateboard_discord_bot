@@ -134,6 +134,9 @@ class Scraper(commands.Cog):
         old_contents = {item['content'] for item in old_data}
 
         for new_item in div_content_list:
+            if "theskateboardshop" in new_item['content']:
+                continue # Skip this item if it contains "theskateboardshop"
+            
             if "day" in new_item['content'] or "days" in new_item['content']:
                 continue # Skip this item if it contains "days or day"
 
@@ -168,7 +171,7 @@ class Scraper(commands.Cog):
         red = Color.red()
 
         embed_alert = discord.Embed(
-            title=':rotating_light::rotating_light:__**ALERT! New Listing Detected**__:rotating_light::rotating_light:',
+            title='ALERT! New Listing Detected',
             colour=red
         )
 
@@ -203,7 +206,7 @@ class Scraper(commands.Cog):
         for x, y in zip(content_list, link_list):
             embed_alert.add_field(name='', value=f"{x}", inline=False)
             embed_alert.add_field(name='', value=f"[LINK HERE]({y})", inline=False)
-            embed_alert.add_field(name='', value=f"<@{dcids.marcusid}><@{dcids.ryzzid}><@{dcids.danishid}>", inline=False)
+            embed_alert.add_field(name='', value=f"<@{dcids.marcusid}>", inline=False)
             await user.send(embed=embed_alert)  
             embed_alert.clear_fields()
             await asyncio.sleep(1)
@@ -246,7 +249,13 @@ class Scraper(commands.Cog):
         else:
             await ctx.send("Web Scraping Disabled!")
             
-        
+    
+
+
+    @commands.command()
+    async def send_msg(self, ctx, *, msg: str):
+        user = self.bot.get_user(dcids.marcusid)
+        user.send(msg)
         
 
 
