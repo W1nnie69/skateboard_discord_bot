@@ -10,8 +10,8 @@ from discord.ext import commands
 from discord import Color
 import time
 import asyncio
-from icecream import ic
-import dcids
+import dcids as id
+
 
 
 class Scraper(commands.Cog):
@@ -201,12 +201,12 @@ class Scraper(commands.Cog):
         
 
         # dick = dict(zip(content_list, link_list))
-        user = self.bot.get_user(dcids.marcusid)
+        user = self.bot.get_user(id.marcusid)
         
         for x, y in zip(content_list, link_list):
             embed_alert.add_field(name='', value=f"{x}", inline=False)
             embed_alert.add_field(name='', value=f"[LINK HERE]({y})", inline=False)
-            embed_alert.add_field(name='', value=f"<@{dcids.marcusid}>", inline=False)
+            embed_alert.add_field(name='', value=f"<@{id.marcusid}>", inline=False)
             await user.send(embed=embed_alert)  
             embed_alert.clear_fields()
             await asyncio.sleep(1)
@@ -254,9 +254,10 @@ class Scraper(commands.Cog):
 
     @commands.command()
     async def send_msg(self, ctx, *, msg: str):
-        user = self.bot.get_user(dcids.marcusid)
-        user.send(msg)
-        
+        marcus = self.bot.get_user(id.marcusid)
+        dani = self.bot.get_user(id.myid)
+        await marcus.send(msg)
+        await dani.send(msg)
 
 
     # @commands.command()
