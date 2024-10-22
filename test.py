@@ -19,10 +19,10 @@ driver.get(url)
 
 # time.sleep(1000)
 
-driver.find_element(By.CSS_SELECTOR, "button.D_oX.D_biI").click()
+# driver.find_element(By.XPATH, '//div[@role="dialog" and @aria-modal="true"]').click()
 
 # time.sleep(100)
-ligma = driver.find_elements(By.CSS_SELECTOR, "div.D_tN.D_nO")
+ligma = driver.find_elements(By.XPATH, '//div[contains(@data-testid, "listing-card-")]')
 
 #SAVING USING TXT FILE
 # with open('test.txt', 'w', encoding='utf-8') as file:

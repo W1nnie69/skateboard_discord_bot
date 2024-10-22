@@ -8,6 +8,7 @@ from selenium.common.exceptions import TimeoutException
 from webdriver_manager.chrome import ChromeDriverManager
 from discord.ext import commands
 from discord import Color
+from icecream import ic
 import time
 import asyncio
 import dcids as id
@@ -32,7 +33,7 @@ class Scraper(commands.Cog):
         chrome_options = Options()
         chrome_options.add_argument("--disable-extensions")
         chrome_options.add_argument("--disable-gpu")
-        chrome_options.add_argument("--no-sandbox") # linux only
+        # chrome_options.add_argument("--no-sandbox") # linux only
         # chrome_options.add_argument("--headless=new") # for Chrome >= 109
         # chrome_options.add_argument("--headless")
         # chrome_options.headless = True # also works
@@ -56,8 +57,10 @@ class Scraper(commands.Cog):
 
         # time.sleep(1000)
 
-        driver.find_element(By.XPATH, '//button[@aria-label="Close"]').click()
+        # driver.find_element(By.XPATH, '//button[@aria-label="Close"]').click()
+        # driver.find_element(By.XPATH, '//div[@role="dialog" and @aria-modal="true"]').click()
 
+    
         # time.sleep(100)
         testid_divs = driver.find_elements(By.XPATH, '//div[contains(@data-testid, "listing-card-")]')
 
@@ -201,13 +204,15 @@ class Scraper(commands.Cog):
         
 
         # dick = dict(zip(content_list, link_list))
-        user = self.bot.get_user(id.marcusid)
+        marcus = self.bot.get_user(id.marcusid)
+        dani = self.bot.get_user(id.myid)
         
         for x, y in zip(content_list, link_list):
             embed_alert.add_field(name='', value=f"{x}", inline=False)
             embed_alert.add_field(name='', value=f"[LINK HERE]({y})", inline=False)
             embed_alert.add_field(name='', value=f"<@{id.marcusid}>", inline=False)
-            await user.send(embed=embed_alert)  
+            await marcus.send(embed=embed_alert)
+            await dani.send(embed=embed_alert)
             embed_alert.clear_fields()
             await asyncio.sleep(1)
 
@@ -251,13 +256,42 @@ class Scraper(commands.Cog):
             
     
 
+    # @commands.command()
+    # async def sel_victim(self, ctx, index: str):
+    #     phonebook = [id.marcusid, id.myid, id.ryzzid, id.danishid, id.rusid]
+
+    #     if index == "show":
+    #         await ctx.send("1:Marcus, 2:Dani, 3:Ryzz, 4:Danish, 5:Rus")
+
+    #     elif index:
+    #         xedni = int(index)
+    #         x = phonebook[xedni - 1]
+    #         self.victim_selected = self.bot.get_user(x)
+
+    #         ic(x)
+    #         ic(self.victim_selected)
+
+
+    #         if xedni == 1:
+    #             await ctx.send("Marcus selected")
+    #         elif xedni == 2:
+    #             await ctx.send("Dani selected")
+    #         elif xedni == 3:
+    #             await ctx.send("Ryzz selected")
+    #         elif xedni == 4:
+    #             await ctx.send("Danish selected")
+    #         elif xedni == 5:
+    #             await ctx.send("Rus selected")
+    #         else:
+    #             await ctx.send("Select only 1 to 5 dumbass")
+
+        
+
 
     @commands.command()
     async def send_msg(self, ctx, *, msg: str):
-        marcus = self.bot.get_user(id.marcusid)
-        dani = self.bot.get_user(id.myid)
-        await marcus.send(msg)
-        await dani.send(msg)
+        
+        await self.victim_selected.send(msg)
 
 
     # @commands.command()
