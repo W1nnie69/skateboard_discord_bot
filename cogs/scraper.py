@@ -41,7 +41,7 @@ class Scraper(commands.Cog):
 
         url = "https://www.carousell.sg/search/skateboard?addRecent=true&canChangeKeyword=true&includeSuggestions=true&price_start=1&searchId=t1nH5D&sort_by=3&t-search_query_source=direct_search"
 
-        driver.set_page_load_timeout(15)
+        driver.set_page_load_timeout(25)
 
         try:
             driver.get(url)
