@@ -61,6 +61,6 @@ for index, div in enumerate(ligma):
     div_content_list.append(div_content)
 
 
-with open("testing.json", "w", encoding="utf-8") as json_file:
+with open("test-scrape.json", "w", encoding="utf-8") as json_file:
     json.dump(div_content_list, json_file, ensure_ascii=False, indent=4)
 

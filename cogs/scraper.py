@@ -197,6 +197,7 @@ class Scraper(commands.Cog):
             else:
                 pass
 
+        ic(content_list)
         # for i in range(1, 2):
         #     if i < len(link_list):
         #         selected_items.append(link_list[i])
@@ -230,9 +231,7 @@ class Scraper(commands.Cog):
             else:
                 pass
             
-
             await asyncio.sleep(180)
-
 
             if self.gay == False:
                 break
@@ -272,58 +271,6 @@ class Scraper(commands.Cog):
         
     #     else:
     #         pass
-
-
-
-    # @commands.command()
-    # async def test_alert(self, ctx):
-    #     red = Color.red()
-
-    #     embed_alert = discord.Embed(
-    #         title=':rotating_light::rotating_light:__**ALERT! New Listing Detected**__:rotating_light::rotating_light:',
-    #         colour=red
-    #     )
-
-    #     content_list = []
-    #     link_list = []
-    #     selected_content = []
-    #     selected_items = []
-
-
-    #     with open('old_data.json', 'r', encoding='utf-8') as jf:
-    #         data = json.load(jf)
-            
-    #     for div in data:
-    #         links = div.get('links', [])
-    #         content = div.get('content', [])
-
-    #         if len(links) >= 2:
-    #             link_list.append(links[1])
-
-    #         if content:
-    #             content_list.append(content)
-                
-    #         else:
-    #             pass
-
-    #     for i in range(1, 2):
-    #         if i < len(link_list):
-    #             selected_items.append(link_list[i])
-    #             selected_content.append(content_list[i])
-        
-
-    #     # dick = dict(zip(content_list, link_list))
-    #     user = self.bot.get_user(dcids.marcusid)
-        
-    #     for x, y in zip(selected_content, selected_items):
-    #         embed_alert.add_field(name='', value=f"{x}", inline=False)
-    #         embed_alert.add_field(name='', value=f"[LINK HERE]({y})", inline=False)
-    #         embed_alert.add_field(name='', value=f"<@{dcids.marcusid}><@{dcids.ryzzid}><@{dcids.danishid}>", inline=False)
-    #         await user.send(embed=embed_alert)  
-    #         embed_alert.clear_fields()
-    #         await asyncio.sleep(1)
-
-
 
 
 
