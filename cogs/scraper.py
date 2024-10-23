@@ -29,7 +29,7 @@ class Scraper(commands.Cog):
     gay = False
 
 
-    async def scrape(self):
+    def scrape(self):
         chrome_options = Options()
         chrome_options.add_argument("--disable-extensions")
         chrome_options.add_argument("--disable-gpu")
@@ -57,8 +57,8 @@ class Scraper(commands.Cog):
 
         # time.sleep(1000)
 
-        # driver.find_element(By.XPATH, '//button[@aria-label="Close"]').click()
-        # driver.find_element(By.XPATH, '//div[@role="dialog" and @aria-modal="true"]').click()
+        buttons = driver.find_elements(By.XPATH, '//button[@aria-label="Close"]')
+        buttons[1].click()
 
     
         # time.sleep(100)
@@ -73,6 +73,20 @@ class Scraper(commands.Cog):
                 "content": div.text
             }
             
+
+            # Locate the <path> element inside the div and extract its 'id'
+            try:
+                div.find_element(By.CSS_SELECTOR, 'path[id="iconBumpOutlined"]')
+                bump_Present = "Bump-found"
+            except:
+                bump_Present= "Not-found" # If the path with the id isn't found, set to None
+                # path_element = "Not found"
+
+            div_content["bump_Present"] = bump_Present # Add bump id to the content
+
+
+
+
             # Find links inside the current div (searching for anchor tags <a>)
             links = []
             a_tags = div.find_elements(By.TAG_NAME, "a")
@@ -138,15 +152,23 @@ class Scraper(commands.Cog):
 
         for new_item in div_content_list:
             if "theskateboardshop" in new_item['content']:
+                print("skip1")
                 continue # Skip this item if it contains "theskateboardshop"
             
+            if "Bump-found" in new_item['bump_Present']:
+                print("skip2")
+                continue # Skip this item if it was bumpped
+            
             if "day" in new_item['content'] or "days" in new_item['content']:
+                print("skip3")
                 continue # Skip this item if it contains "days or day"
 
             if any(time in new_item['content'] for time in time_list_new):
+                print("skip4")
                 continue # Skip this item if it contains any time from the time_list
 
             if new_item['content'] not in old_contents:
+                print("adding to diff")
                 diff.append(new_item)
 
         ic(diff)
@@ -156,14 +178,14 @@ class Scraper(commands.Cog):
                 json.dump(diff, file, ensure_ascii=False, indent=4)
 
             with open("old_data.json", "w", encoding="utf-8") as json_file:
-                        json.dump(div_content_list, json_file, ensure_ascii=False, indent=4)
+                json.dump(div_content_list, json_file, ensure_ascii=False, indent=4)
 
             return diff
             
         else:
             print("IF YOU SEE THIS THAT MEANS 'DIFF' IS EMPTY")
             with open("old_data.json", "w", encoding="utf-8") as json_file:
-                        json.dump(div_content_list, json_file, ensure_ascii=False, indent=4)
+                json.dump(div_content_list, json_file, ensure_ascii=False, indent=4)
 
             print("IF YOU SEE THIS THAT MEANS IT WORKS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
        
@@ -223,7 +245,7 @@ class Scraper(commands.Cog):
 
     async def toggle_logic(self, ctx):
          while self.gay == True:
-            htmldata = await self.scrape()
+            htmldata = await asyncio.to_thread(self.scrape) #runs the scrape func in another thread to prevent event loop blocking
 
             if htmldata:
                 await self.send_alert(ctx, htmldata)
@@ -231,10 +253,11 @@ class Scraper(commands.Cog):
             else:
                 pass
             
-            await asyncio.sleep(180)
+            for _ in range(180):  #sleep bit by bit for 3 mins instead of sleeping for 3mins straight, prevents event loop blocking
+                await asyncio.sleep(1)    
 
-            if self.gay == False:
-                break
+                if self.gay == False:
+                    break
 
 
 

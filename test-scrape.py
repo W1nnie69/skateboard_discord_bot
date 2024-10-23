@@ -3,6 +3,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 import time
 import json
+from icecream import ic
 
 chrome_options = Options()
 chrome_options.add_argument("--disable-extensions")
@@ -19,22 +20,16 @@ driver.get(url)
 
 # time.sleep(1000)
 
-# driver.find_element(By.XPATH, '//div[@role="dialog" and @aria-modal="true"]').click()
+buttons = driver.find_elements(By.XPATH, '//button[@aria-label="Close"]')
+if len(buttons) >= 2:
+    buttons[1].click()
+
+else:
+    print("No buttons lil bro")
 
 # time.sleep(100)
 ligma = driver.find_elements(By.XPATH, '//div[contains(@data-testid, "listing-card-")]')
 
-#SAVING USING TXT FILE
-# with open('test.txt', 'w', encoding='utf-8') as file:
-#     for index, div in enumerate(ligma):
-#         content = div.text
-#         file.write(f"Content of div {index + 1}:\n")
-#         file.write(content + "\n\n")
-
-
-
-#SAVING USING JSON FILE
-# div_html_dict = {f"div_{index + 1}": div.get_attribute("outerHTML") for index, div in enumerate(ligma)}
 
 div_content_list = []
 
@@ -43,12 +38,26 @@ for index, div in enumerate(ligma):
     div_content = {
         "div_number": index + 1,
         "content": div.text
+    
     }
+
+
+    # Locate the <path> element inside the div and extract its 'id'
+    try:
+        path_element = div.find_element(By.CSS_SELECTOR, 'path[id="iconBumpOutlined"]')
+        bump_Present = "Bump-found"
+    except:
+        bump_Present= "Not-found" # If the path with the id isn't found, set to None
+        # path_element = "Not found"
+
+    div_content["bump_Present"] = bump_Present # Add bump id to the content
+    
     
     # Find links inside the current div (searching for anchor tags <a>)
     links = []
     a_tags = div.find_elements(By.TAG_NAME, "a")
     
+
     for a in a_tags:
         href = a.get_attribute("href")
         if href:  # Only add the href if it exists

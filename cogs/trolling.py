@@ -15,9 +15,19 @@ class Trolling(commands.Cog):
     async def on_ready(self):
         print("Trolling cog loaded")
 
-    
 
+
+    def is_allowed_user():
+        allowed_users = [id.myid]
+        def predicate(ctx):
+            return ctx.author.id in allowed_users
+        return commands.check(predicate)
+
+
+
+    
     @commands.command()
+    @is_allowed_user()
     async def sel_victim(self, ctx, index: str):
         phonebook = [id.marcusid, id.myid, id.ryzzid, id.danishid, id.rusid]
 
@@ -50,6 +60,7 @@ class Trolling(commands.Cog):
 
 
     @commands.command()
+    @is_allowed_user()
     async def send_msg(self, ctx, *, msg: str):
         
         await self.victim_selected.send(msg)
