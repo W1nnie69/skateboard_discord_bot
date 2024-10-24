@@ -152,19 +152,19 @@ class Scraper(commands.Cog):
 
         for new_item in div_content_list:
             if "theskateboardshop" in new_item['content']:
-                print("skip1")
+                print("skipped ciause its marcus's listng")
                 continue # Skip this item if it contains "theskateboardshop"
             
-            if "Bump-found" in new_item['bump_Present']:
-                print("skip2")
+            if new_item['bump_Present'] == "Bump-found":
+                print("skipped cause of bump")
                 continue # Skip this item if it was bumpped
             
             if "day" in new_item['content'] or "days" in new_item['content']:
-                print("skip3")
+                print("skipped cause listing was day/days old")
                 continue # Skip this item if it contains "days or day"
 
             if any(time in new_item['content'] for time in time_list_new):
-                print("skip4")
+                print("skipped cause listing was beyond 3 mins")
                 continue # Skip this item if it contains any time from the time_list
 
             if new_item['content'] not in old_contents:
