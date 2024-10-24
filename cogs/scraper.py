@@ -152,23 +152,23 @@ class Scraper(commands.Cog):
 
         for new_item in div_content_list:
             if "theskateboardshop" in new_item['content']:
-                print("skipped ciause its marcus's listng")
+                # print("skipped ciause its marcus's listng")
                 continue # Skip this item if it contains "theskateboardshop"
             
             if new_item['bump_Present'] == "Bump-found":
-                print("skipped cause of bump")
+                # print("skipped cause of bump")
                 continue # Skip this item if it was bumpped
             
             if "day" in new_item['content'] or "days" in new_item['content']:
-                print("skipped cause listing was day/days old")
+                # print("skipped cause listing was day/days old")
                 continue # Skip this item if it contains "days or day"
 
             if any(time in new_item['content'] for time in time_list_new):
-                print("skipped cause listing was beyond 3 mins")
+                # print("skipped cause listing was beyond 3 mins")
                 continue # Skip this item if it contains any time from the time_list
 
             if new_item['content'] not in old_contents:
-                print("adding to diff")
+                # print("adding to diff")
                 diff.append(new_item)
 
         ic(diff)
@@ -195,16 +195,10 @@ class Scraper(commands.Cog):
     async def send_alert(self, ctx, htmldata):
         red = Color.red()
 
-        embed_alert = discord.Embed(
-            title='ALERT! New Listing Detected',
-            colour=red
-        )
-
+    
         content_list = []
         link_list = []
-        selected_content = []
-        selected_items = []
-
+        
             
         for div in htmldata:
             links = div.get('links', [])
@@ -220,17 +214,23 @@ class Scraper(commands.Cog):
                 pass
 
         ic(content_list)
-        # for i in range(1, 2):
-        #     if i < len(link_list):
-        #         selected_items.append(link_list[i])
-        #         selected_content.append(content_list[i])
-        
-
-        # dick = dict(zip(content_list, link_list))
+     
         marcus = self.bot.get_user(id.marcusid)
         dani = self.bot.get_user(id.myid)
         
         for x, y in zip(content_list, link_list):
+            text = ''.join(x)
+
+            filtered_listing_name = text.split("\n")[2]
+            filtered_price = text.split("\n")[3]
+            filtered_condition = text.split("\n")[4]
+
+            embed_alert = discord.Embed(
+                        title=f'Listing name: {filtered_listing_name}\nPrice: {filtered_price}\nCondition: {filtered_condition}',
+                        colour=red
+                    )
+
+
             embed_alert.add_field(name='', value=f"{x}", inline=False)
             embed_alert.add_field(name='', value=f"[LINK HERE]({y})", inline=False)
             embed_alert.add_field(name='', value=f"<@{id.marcusid}>", inline=False)
@@ -278,30 +278,6 @@ class Scraper(commands.Cog):
             
 
 
-
-    # @commands.command()
-    # async def send_msg(self, ctx, *, msg: str):
-        
-    #     await self.victim_selected.send(msg)
-
-
-    # @commands.command()
-    # async def test_ws(self, ctx):
-    #     htmldata = await self.scrape()
-
-    #     if htmldata:
-    #         await self.send_alert(ctx, htmldata)
-        
-    #     else:
-    #         pass
-
-
-
-
-    @commands.command()
-    async def ts(self, ctx):
-        await ctx.send("testing scraper")
-        await self.scrap()
 
 
 

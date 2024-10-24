@@ -31,15 +31,10 @@ class Testing(commands.Cog):
     async def ts_a(self, ctx):
         red = Color.red()
 
-        embed_alert = discord.Embed(
-            title='This is a test Alert!',
-            colour=red
-        )
+       
 
         content_list = []
         link_list = []
-        selected_content = []
-        selected_items = []
 
 
         with open('testing.json', 'r', encoding='utf-8') as f:
@@ -60,12 +55,25 @@ class Testing(commands.Cog):
                 pass
 
         ic(content_list)
-        
+
 
         marcus = self.bot.get_user(id.marcusid)
         dani = self.bot.get_user(id.myid)
+
         
         for x, y in zip(content_list, link_list):
+            text = ''.join(x)
+
+            filtered_listing_name = text.split("\n")[2]
+            filtered_price = text.split("\n")[3]
+            filtered_condition = text.split("\n")[4]
+
+            embed_alert = discord.Embed(
+                        title=f'Listing name: {filtered_listing_name}\nPrice: {filtered_price}\nCondition: {filtered_condition}',
+                        colour=red
+                    )
+            
+
             embed_alert.add_field(name='', value=f"{x}", inline=False)
             embed_alert.add_field(name='', value=f"[LINK HERE]({y})", inline=False)
             embed_alert.add_field(name='', value=f"<@{id.marcusid}>", inline=False)
