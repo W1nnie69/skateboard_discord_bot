@@ -213,7 +213,6 @@ class Scraper(commands.Cog):
             else:
                 pass
 
-        ic(content_list)
      
         marcus = self.bot.get_user(id.marcusid)
         dani = self.bot.get_user(id.myid)
@@ -221,9 +220,16 @@ class Scraper(commands.Cog):
         for x, y in zip(content_list, link_list):
             text = ''.join(x)
 
-            filtered_listing_name = text.split("\n")[2]
-            filtered_price = text.split("\n")[3]
-            filtered_condition = text.split("\n")[4]
+            if "Buyer Protection" in text:
+                filtered_listing_name = text.split("\n")[3]
+                filtered_price = text.split("\n")[4]
+                filtered_condition = text.split("\n")[5]
+
+            else:
+                filtered_listing_name = text.split("\n")[2]
+                filtered_price = text.split("\n")[3]
+                filtered_condition = text.split("\n")[4]
+
 
             embed_alert = discord.Embed(
                         title=f'Listing name: {filtered_listing_name}\nPrice: {filtered_price}\nCondition: {filtered_condition}',
