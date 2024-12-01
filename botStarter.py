@@ -20,4 +20,6 @@ async def on_ready():
     print("Commands have been synced.")
 
 
-bot.run(config.token)
+def Start_Bot():
+    bot.run(config.token)
+
