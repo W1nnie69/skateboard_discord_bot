@@ -20,6 +20,6 @@ async def on_ready():
     print("Commands have been synced.")
 
 
-def Start_Bot():
+if __name__ == '__main__':
     bot.run(config.token)
 
